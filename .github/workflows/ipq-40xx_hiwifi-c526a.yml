@@ -40,6 +40,15 @@ jobs:
       env:
         DEBIAN_FRONTEND: noninteractive
       run: |
+        # disable command workflow processing
+        echo "::stop-commands::`echo -n ${{ github.token }} | sha256sum | head -c 64`"
+
+        # log untrusted output
+        echo "untrusted output"
+
+        # enable workflow command processing
+        echo "::`echo -n ${{ github.token }} | sha256sum | head -c 64`::"
+        
         sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
         sudo -E apt-get -qq update
         sudo -E apt-get -qq install $(curl -fsSL git.io/depends-ubuntu-1804)
